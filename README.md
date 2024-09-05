@@ -1,7 +1,7 @@
 # PEGA O BUS AI
 
 # Escopo: 
-O software tem como objetivo identificar  o intinerario de onibus da cidade de Mogi das Cruzes, a informação do onibus e horarios 
+O software tem como objetivo identificar  o itinerario de onibus da cidade de Mogi das Cruzes, a informação do onibus e horarios 
 é enviado para o Gemini e assim devolvido no frontend  com a atualização do proximo onibus que saira do terminal
 
 <hr/>
