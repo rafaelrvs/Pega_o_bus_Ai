@@ -1,7 +1,30 @@
+
 const btn = document.querySelector(".btn");
 const inputPesquisa = document.querySelector(".pesquisa");
 const resultadoDiv = document.getElementById("resultado");
+const listaOnibusSelect = document.getElementById('lista-onibus');
 const dataAtual = new Date();
+let onibus = [];
+
+// Populando o array onibus
+linhasOnibus.forEach(linha => {
+  onibus.push(linha);
+});
+
+// Loop para criar e exibir os itens do array como opções dentro do select
+for (let i = 0; i < onibus.length; i++) {
+  const optionItem = document.createElement('option'); // Cria um elemento option para cada item
+  optionItem.value = onibus[i]; // Define o valor do option
+  optionItem.textContent = onibus[i]; // Define o texto exibido no option
+  listaOnibusSelect.appendChild(optionItem); // Insere o option dentro do elemento select
+}
+
+// Evento para preencher o campo de pesquisa com o valor selecionado no dropdown
+listaOnibusSelect.addEventListener('change', function() {
+  inputPesquisa.value = listaOnibusSelect.value.split("-")[0]; // Preenche o campo de pesquisa com o valor selecionado
+});
+
+// Evento de clique para buscar os resultados com base no input do usuário
 btn.addEventListener('click', () => {
   const inputUsuario = inputPesquisa.value.toUpperCase(); 
   validaRua(inputUsuario);
@@ -52,7 +75,7 @@ function processaArquivoTexto(conteudo, inputUsuario) {
       headers: {
         'Content-Type': 'application/json'
       },
-      body: JSON.stringify({ text:` Me responda de forma resumida o proximo horario de onibus de acordo com meu horario atual ${dataAtual} ${blocosEncontrados.join('\n\n') }` })
+      body: JSON.stringify({ text:`Me responda de forma resumida o próximo horário de ônibus de acordo com meu horário atual ${dataAtual} ${blocosEncontrados.join('\n\n') }` })
     })
     .then(response => response.json())
     .then(data => {

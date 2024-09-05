@@ -28,7 +28,7 @@ section {
     display: flex; /* Usa Flexbox para layout */
     flex-direction: column; /* Alinha os itens na vertical */
     align-items: center; /* Centraliza os itens horizontalmente */
-    margin-bottom: 3rem; /* Espaçamento abaixo de cada seção */
+    margin-bottom: 5rem; /* Espaçamento abaixo de cada seção */
 }
 .container-btn{
     display: flex;
@@ -40,7 +40,7 @@ section {
 #resultado{
     text-align: center;
     padding: 5px 0 ;
-    height: 200px;
+    height: 150px;
     width: 490px    ;
     border-radius: 0.5rem; /* Borda arredondada */
     background-color: #FFFFFF;
@@ -52,7 +52,7 @@ section {
 section input {
     width: 30rem; /* Largura dos inputs */
     border: none; /* Remove a borda padrão */
-    padding: 1rem; /* Espaçamento interno */
+    padding: 0.8rem; /* Espaçamento interno */
     border-radius: 0.5rem; /* Borda arredondada */
     margin-bottom: 1rem; /* Espaçamento abaixo dos inputs */
     color: #45474B; /* Cor do texto */
@@ -73,6 +73,7 @@ section button {
     cursor: pointer; /* Muda o cursor para indicar que é clicável */
     align-self: flex-end;
     margin-top: 15px;
+    margin-bottom: 25px;
 }
 
 /* Adiciona efeito hover ao botão de pesquisa */
@@ -144,7 +145,11 @@ footer {
     bottom: 0; /* Alinha ao fundo da página */
     font-size: 1rem; /* Tamanho da fonte */
 }
-
+#lista-onibus{
+    margin-bottom: 15px;
+    height: 20px;
+    width: 490px;
+}
 
 /* Responsividade para celulares */
 @media (max-width: 780px) {
@@ -161,6 +166,12 @@ footer {
         box-shadow: #222831 0px 0px 2px;
         font-size: 0.8rem;
     }
+    #lista-onibus{
+        margin-bottom: 15px;
+        height: 20px;
+        width: 290px;
+    }
+    
     .container-btn{
         width: 290px;
         
