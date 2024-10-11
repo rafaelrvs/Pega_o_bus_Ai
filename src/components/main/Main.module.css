@@ -1,0 +1,112 @@
+.containerChat {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    height: 300px;
+    width: 500px;
+    overflow: hidden;
+    margin: 0 auto;
+    box-shadow: 1px 1px 5px;
+    border-radius: 15px;
+}
+
+.section {
+    display: flex;
+    flex-direction: column;
+    gap: 25px;
+}
+
+.img {
+    height: 200px;
+}
+
+.header {
+    display: flex;
+    height: 50px;
+    background-color: var(--background);
+    border-radius: 15px 15px 0 0;
+    box-shadow: 0 1px 5px black;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 10px;
+}
+
+.header p {
+    font-weight: bold;
+    font-size: 1.3rem;
+}
+
+
+.option{
+
+    height: 30px;
+    width: 95%;
+    border-radius: 5px;
+    border: none;
+    padding: 5PX;
+    margin: 0 auto;
+    box-shadow: 0px 0px 2px;
+}
+.inputText {
+    padding: 5PX;
+    width: 90%;
+    height: 30px;
+    margin-bottom: 10PX;
+    margin-top: 10px;
+    border: none;
+    border-radius: 5px;
+   background-color: #fff;
+    box-shadow: 0px 0px 2px;
+    border: none;
+    align-self:flex-end;
+    margin-right: 25px;
+    
+
+    
+    
+}
+
+.resultado{
+    height: 40%;
+    width: 90%;
+    margin: 0 auto;
+    border: 1px solid #f7f7f7;
+    margin-bottom: 10px;
+}
+.inputBtn {
+    margin-left: 10px;
+    width: 80px;
+    align-self: flex-end;
+    margin-right: 25px;
+    margin-bottom: 5px;
+    border-radius: 5px;
+    height: 40px;
+    border: none;
+    background-color: var(--background)
+}
+
+.btnInativo{
+    margin-left: 10px;
+    width: 80px;
+    align-self: flex-end;
+    margin-right: 25px;
+    margin-bottom: 5px;
+    border-radius: 5px;
+    height: 40px;
+    border: 1px solid var(--background);
+    background-color: #fff;
+    color: var(--background);
+
+}
+
+@media (max-width:600px) {
+    .containerChat{
+        width: 340px;
+    }
+    .containerBtn{
+        width: 90%;
+        margin: 0 auto;
+        gap: 10px;
+    }
+  
+}
