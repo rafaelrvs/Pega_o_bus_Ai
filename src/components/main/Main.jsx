@@ -10,8 +10,9 @@ const Main = () => {
   const [blocosEncontrados, setBlocosEncontrados] = useState([]); // Armazena os blocos encontrados no arquivo
   const [isButtonDisabled, setIsButtonDisabled] = useState(false); // Estado para desabilitar o botão
   const dataAtual = new Date();
-
-
+  
+  
+  setOnibus(linhasOnibus); 
   
   
   const handleSelectChange = (e) => {
@@ -34,7 +35,6 @@ const Main = () => {
   
   
   const processaArquivoTexto = (conteudo, inputUsuario) => {
-    setOnibus(linhasOnibus); 
     const linhas = conteudo.split('\n');
     let blocoAtual = '';
     let blocosTemp = [];
