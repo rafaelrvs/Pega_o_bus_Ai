@@ -6,9 +6,10 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <meta name="google-adsense-account" content="ca-pub-7736006621106112">
     <title>Pega o bus Ai</title>
-    <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' https://*.googlesyndication.com https://*.doubleclick.net; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; connect-src 'self' https://*.google.com https://*.doubleclick.net;">
+    <!-- Definindo um valor nonce aleatório para segurança dos scripts -->
+    <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'nonce-randomNonce123' https://*.googlesyndication.com https://*.doubleclick.net; style-src 'self' https://fonts.googleapis.com; connect-src 'self' https://*.google.com https://*.doubleclick.net;">
     
-    <script>
+    <script nonce="randomNonce123">
       (adsbygoogle = window.adsbygoogle || []).push({
         google_ad_client: "ca-pub-7736006621106112",
         enable_page_level_ads: true
