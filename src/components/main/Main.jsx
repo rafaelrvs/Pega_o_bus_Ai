@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import styles from './Main.module.css';
 import { linhasOnibus } from '../../dados';
-import Itinerario from './Itinerario.txt'
 
 const Main = () => {
   const [onibus, setOnibus] = useState([]); // Armazena a lista de ônibus
@@ -9,7 +8,6 @@ const Main = () => {
   const [resultado, setResultado] = useState(''); // Resultado a ser exibido
   const [blocosEncontrados, setBlocosEncontrados] = useState([]); // Armazena os blocos encontrados no arquivo
   const [isButtonDisabled, setIsButtonDisabled] = useState(false); // Estado para desabilitar o botão
-  
   const dataAtual = new Date();
 
   useEffect(() => {
@@ -24,7 +22,7 @@ const Main = () => {
     const inputUsuario = inputPesquisa.toUpperCase();
     if (inputUsuario.length > 0) {
       setIsButtonDisabled(true); // Desabilita o botão
-      fetch(Itinerario) // Corrigido o caminho para acessar o arquivo na pasta public
+      fetch('/Itinerario.txt') // Caminho acessível no navegador
         .then((response) => response.text())
         .then((data) => processaArquivoTexto(data, inputUsuario))
         .catch((error) => console.error('Erro ao carregar o arquivo:', error));
