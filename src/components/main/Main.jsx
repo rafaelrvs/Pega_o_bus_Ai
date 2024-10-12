@@ -22,7 +22,7 @@ const Main = () => {
     const inputUsuario = inputPesquisa.toUpperCase();
     if (inputUsuario.length > 0) {
       setIsButtonDisabled(true); // Desabilita o botão
-      fetch('src/Intinerario.txt') // Corrigido o caminho para acessar o arquivo na pasta public
+      fetch('./Intinerario.txt') // Corrigido o caminho para acessar o arquivo na pasta public
         .then((response) => response.text())
         .then((data) => processaArquivoTexto(data, inputUsuario))
         .catch((error) => console.error('Erro ao carregar o arquivo:', error));
