@@ -4,15 +4,14 @@ import { linhasOnibus } from '../../dados';
 
 
 const Main = () => {
-  const [onibus, setOnibus] = useState([]); // Armazena a lista de ônibus
   const [inputPesquisa, setInputPesquisa] = useState(''); // Campo de pesquisa
   const [resultado, setResultado] = useState(''); // Resultado a ser exibido
   const [blocosEncontrados, setBlocosEncontrados] = useState([]); // Armazena os blocos encontrados no arquivo
   const [isButtonDisabled, setIsButtonDisabled] = useState(false); // Estado para desabilitar o botão
   const dataAtual = new Date();
-  
-  
-  setOnibus(linhasOnibus); 
+
+
+
   
   
   const handleSelectChange = (e) => {
@@ -101,7 +100,7 @@ const Main = () => {
           value={inputPesquisa}
         >
           <option className={styles.option} value="">Selecione a linha</option>
-          {onibus.map((linha, index) => (
+          {linhasOnibus.map((linha, index) => (
             <option key={index} value={linha}>
               {linha}
             </option>
