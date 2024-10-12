@@ -22,7 +22,7 @@ const Main = () => {
     const inputUsuario = inputPesquisa.toUpperCase();
     if (inputUsuario.length > 0) {
       setIsButtonDisabled(true); // Desabilita o botão
-      fetch('src/components/main/Itinerario.txt') // Caminho acessível no navegador
+      fetch('./Itinerario.txt') // Caminho acessível no navegador
         .then((response) => response.text())
         .then((data) => processaArquivoTexto(data, inputUsuario))
         .catch((error) => console.error('Erro ao carregar o arquivo:', error));
