@@ -26,43 +26,42 @@ const Main = () => {
       fetch('/Itinerario.txt') 
         .then((response) => response.text())
         .then((data) => processaArquivoTexto(data, inputUsuario))
-        .catch((error) => console.error('Erro ao carregar o arquivo:', error));
-      
-      // Reabilita o botão após 10 segundos
-      setTimeout(() => {
-        setIsButtonDisabled(false);
-      }, 5000);
+        .catch((error) => console.error('Erro ao carregar o arquivo:', error))
+        .finally(() => {
+          setIsButtonDisabled(false); // Só reabilita após o processo
+        });
     }
   };
+  
 
   const processaArquivoTexto = (conteudo, inputUsuario) => {
     const linhas = conteudo.split('\n');
     let blocoAtual = '';
     let blocosTemp = [];
     let capturandoBloco = false;
-    console.log(linhas);
     
-    
+ 
+  
     linhas.forEach((linha) => {
-      blocosTemp.push(linha);
       if (linha.startsWith('Linha')) {
-        if (capturandoBloco) {
-          blocoAtual = '';
+        if (capturandoBloco && blocoAtual) {
+          blocosTemp.push(blocoAtual); // Armazena o bloco anterior
         }
         capturandoBloco = linha.toUpperCase().includes(inputUsuario);
-      }
-      if (capturandoBloco) {
-        blocoAtual += linha + '\n';
+        blocoAtual = capturandoBloco ? linha + '\n' : ''; // Reseta o bloco atual
+      } else if (capturandoBloco) {
+        blocoAtual += linha + '\n'; // Continua capturando o bloco
       }
     });
-
-    if (blocoAtual) {
+  
+    // Captura o último bloco
+    if (capturandoBloco && blocoAtual) {
       blocosTemp.push(blocoAtual);
     }
-
+  
     if (blocosTemp.length > 0) {
-      setBlocosEncontrados(blocosTemp); // Atualiza o estado com os blocos encontrados
-      enviaParaServidor(blocosTemp); // Envia os blocos para o servidor
+      setBlocosEncontrados(blocosTemp);
+      enviaParaServidor(blocosTemp);
     } else {
       setResultado('Nenhum bloco correspondente encontrado.');
     }
