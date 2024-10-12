@@ -17,7 +17,26 @@
     </script>
   </head>
   <body>
-    <div id="root"></div>
+    <div id="root">
+      <div id="cookieConsent" style="display: none; position: fixed; bottom: 0; width: 100%; background-color: #000; color: #fff; padding: 20px; text-align: center;">
+        Este site utiliza cookies para garantir a melhor experiência para você. 
+        <button id="acceptCookies" style="background-color: #4CAF50; color: white; padding: 10px; margin-left: 10px; border: none; cursor: pointer;">Aceitar Cookies</button>
+      </div>
+      
+      <script>
+        document.addEventListener('DOMContentLoaded', function () {
+          if (!localStorage.getItem('cookieConsent')) {
+            document.getElementById('cookieConsent').style.display = 'block';
+          }
+      
+          document.getElementById('acceptCookies').addEventListener('click', function () {
+            localStorage.setItem('cookieConsent', 'true');
+            document.getElementById('cookieConsent').style.display = 'none';
+          });
+        });
+      </script>
+      
+    </div>
     <script type="module" src="/src/main.jsx"></script>
     <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
   </body>
