@@ -46,20 +46,21 @@
     padding: 5PX;
     margin: 0 auto;
     box-shadow: 0px 0px 2px;
+    margin-bottom: 10PX;
 }
 .inputText {
     padding: 5PX;
     width: 90%;
-    height: 30px;
-    margin-bottom: 10PX;
-    margin-top: 10px;
+    height: 25px;
+
     border: none;
     border-radius: 5px;
    background-color: #fff;
     box-shadow: 0px 0px 2px;
     border: none;
     align-self:flex-end;
-    margin-right: 25px;
+  
+    margin: 0 auto;
     
 
     
@@ -72,6 +73,10 @@
     margin: 0 auto;
     border: 1px solid #f7f7f7;
     margin-bottom: 10px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
 }
 .inputBtn {
     margin-left: 10px;
