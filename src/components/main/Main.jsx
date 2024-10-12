@@ -2,45 +2,53 @@ import React, { useState, useEffect } from 'react';
 import styles from './Main.module.css';
 import { linhasOnibus } from '../../dados';
 
-
 const Main = () => {
   const [inputPesquisa, setInputPesquisa] = useState(''); // Campo de pesquisa
   const [resultado, setResultado] = useState(''); // Resultado a ser exibido
   const [blocosEncontrados, setBlocosEncontrados] = useState([]); // Armazena os blocos encontrados no arquivo
   const [isButtonDisabled, setIsButtonDisabled] = useState(false); // Estado para desabilitar o botão
+  const [isLoading, setIsLoading] = useState(false); // Estado para indicar carregamento
   const dataAtual = new Date();
 
+  useEffect(() => {
+    // Garante que todos os recursos de estilo e layout sejam carregados antes de manipular o DOM
+    const handleLoad = () => {
+      console.log("Todos os recursos foram carregados.");
+    };
 
+    window.addEventListener('load', handleLoad);
 
-  
-  
+    return () => {
+      window.removeEventListener('load', handleLoad);
+    };
+  }, []);
+
   const handleSelectChange = (e) => {
     setInputPesquisa(e.target.value.split('-')[0]); // Preenche o campo de pesquisa com o valor selecionado
   };
-  
+
   const handleButtonClick = () => {
     const inputUsuario = inputPesquisa.toUpperCase();
     if (inputUsuario.length > 0) {
       setIsButtonDisabled(true); // Desabilita o botão
-      fetch('/Itinerario.txt') 
-      .then((response) => response.text())
-      .then((data) => processaArquivoTexto(data, inputUsuario))
-      .catch((error) => console.error('Erro ao carregar o arquivo:', error))
-      .finally(() => {
-        setIsButtonDisabled(false); // Só reabilita após o processo
-      });
+      setIsLoading(true); // Exibe carregando
+      fetch('/Itinerario.txt')
+        .then((response) => response.text())
+        .then((data) => processaArquivoTexto(data, inputUsuario))
+        .catch((error) => console.error('Erro ao carregar o arquivo:', error))
+        .finally(() => {
+          setIsButtonDisabled(false); // Reabilita o botão após o processo
+          setIsLoading(false); // Remove o estado de carregamento
+        });
     }
   };
-  
-  
+
   const processaArquivoTexto = (conteudo, inputUsuario) => {
     const linhas = conteudo.split('\n');
     let blocoAtual = '';
     let blocosTemp = [];
     let capturandoBloco = false;
-    
-    
-    
+
     linhas.forEach((linha) => {
       if (linha.startsWith('Linha')) {
         if (capturandoBloco && blocoAtual) {
@@ -52,12 +60,12 @@ const Main = () => {
         blocoAtual += linha + '\n'; // Continua capturando o bloco
       }
     });
-    
+
     // Captura o último bloco
     if (capturandoBloco && blocoAtual) {
       blocosTemp.push(blocoAtual);
     }
-    
+
     if (blocosTemp.length > 0) {
       setBlocosEncontrados(blocosTemp);
       enviaParaServidor(blocosTemp);
@@ -65,10 +73,10 @@ const Main = () => {
       setResultado('Nenhum bloco correspondente encontrado.');
     }
   };
-  
+
   const enviaParaServidor = (blocos) => {
     setResultado('Carregando...');
-    
+
     fetch('https://api-bus-g6pv.onrender.com/analyze', {
       method: 'POST',
       headers: {
@@ -78,14 +86,14 @@ const Main = () => {
         text: `Me responda de forma resumida o próximo horário de ônibus de acordo com meu horário atual ${dataAtual} ${blocos.join('\n\n')}`,
       }),
     })
-    .then((response) => response.json())
-    .then((data) => setResultado(data.resposta)) // Exibe a resposta do servidor
-    .catch((error) => {
-      console.error('Erro ao enviar para o servidor:', error);
-      setResultado('Erro ao processar a solicitação.');
-    });
+      .then((response) => response.json())
+      .then((data) => setResultado(data.resposta)) // Exibe a resposta do servidor
+      .catch((error) => {
+        console.error('Erro ao enviar para o servidor:', error);
+        setResultado('Erro ao processar a solicitação.');
+      });
   };
-  
+
   return (
     <section className={styles.section}>
       <img className={styles.img} src="/image/onibus.svg" alt="Logo" />
@@ -99,7 +107,9 @@ const Main = () => {
           onChange={handleSelectChange}
           value={inputPesquisa}
         >
-          <option className={styles.option} value="">Selecione a linha</option>
+          <option className={styles.option} value="">
+            Selecione a linha
+          </option>
           {linhasOnibus.map((linha, index) => (
             <option key={index} value={linha}>
               {linha}
@@ -119,12 +129,14 @@ const Main = () => {
           <p>{resultado}</p>
         </div>
 
+        {isLoading && <p>Carregando...</p>}
+
         <input
-          className={isButtonDisabled?styles.btnInativo:styles.inputBtn}
+          className={isButtonDisabled ? styles.btnInativo : styles.inputBtn}
           type="button"
           value="Buscar"
           onClick={handleButtonClick}
-          disabled={isButtonDisabled} // Botão será desativado por 10 segundos
+          disabled={isButtonDisabled} // Botão será desativado enquanto estiver processando
         />
       </div>
     </section>
