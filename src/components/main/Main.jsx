@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import styles from './Main.module.css';
 import { linhasOnibus } from '../../dados';
 
+
 const Main = () => {
   const [onibus, setOnibus] = useState([]); // Armazena a lista de ônibus
   const [inputPesquisa, setInputPesquisa] = useState(''); // Campo de pesquisa
@@ -22,7 +23,7 @@ const Main = () => {
     const inputUsuario = inputPesquisa.toUpperCase();
     if (inputUsuario.length > 0) {
       setIsButtonDisabled(true); // Desabilita o botão
-      fetch('./Itinerario.txt') // Caminho acessível no navegador
+      fetch('/Itinerario.txt') 
         .then((response) => response.text())
         .then((data) => processaArquivoTexto(data, inputUsuario))
         .catch((error) => console.error('Erro ao carregar o arquivo:', error));
@@ -39,11 +40,13 @@ const Main = () => {
     let blocoAtual = '';
     let blocosTemp = [];
     let capturandoBloco = false;
-
+    console.log(linhas);
+    
+    
     linhas.forEach((linha) => {
+      blocosTemp.push(linha);
       if (linha.startsWith('Linha')) {
         if (capturandoBloco) {
-          blocosTemp.push(blocoAtual);
           blocoAtual = '';
         }
         capturandoBloco = linha.toUpperCase().includes(inputUsuario);
