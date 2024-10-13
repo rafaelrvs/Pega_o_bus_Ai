@@ -10,19 +10,6 @@ const Main = () => {
   const [isButtonDisabled, setIsButtonDisabled] = useState(false); // Estado para desabilitar o botão
   const dataAtual = new Date();
 
-  useEffect(() => {
-    // Adiciona o script do Google AdSense de forma dinâmica
-    const script = document.createElement('script');
-    script.src = 'https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-7736006621106112';
-    script.async = true;
-    script.crossOrigin = 'anonymous';
-    document.body.appendChild(script);
-
-    return () => {
-      document.body.removeChild(script); // Remove o script quando o componente for desmontado
-    };
-  }, []);
-
   const handleSelectChange = (e) => {
     setInputPesquisa(e.target.value.split('-')[0]); // Preenche o campo de pesquisa com o valor selecionado
   };
@@ -92,6 +79,14 @@ const Main = () => {
       });
   };
 
+  const handleCookieAccept = () => {
+    const script = document.createElement('script');
+    script.src = 'https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-7736006621106112';
+    script.async = true;
+    script.crossOrigin = 'anonymous';
+    document.body.appendChild(script);
+  };
+
   return (
     <section className={styles.section}>
       <img className={styles.img} src="/image/onibus.svg" alt="Logo" />
@@ -105,7 +100,9 @@ const Main = () => {
           onChange={handleSelectChange}
           value={inputPesquisa}
         >
-          <option className={styles.option} value="">Selecione a linha</option>
+          <option className={styles.option} value="">
+            Selecione a linha
+          </option>
           {linhasOnibus.map((linha, index) => (
             <option key={index} value={linha}>
               {linha}
@@ -125,18 +122,17 @@ const Main = () => {
           <p>{resultado}</p>
         </div>
         <div className={styles.containerBtn}>
-
-
-        <input
-          className={isButtonDisabled ? styles.btnInativo : styles.inputBtn}
-          type="button"
-          value="Buscar"
-          onClick={handleButtonClick}
-          disabled={isButtonDisabled} // Botão desativado por 5 segundos
+          <input
+            className={isButtonDisabled ? styles.btnInativo : styles.inputBtn}
+            type="button"
+            value="Buscar"
+            onClick={handleButtonClick}
+            disabled={isButtonDisabled} // Botão desativado por 5 segundos
           />
-          </div>
+        </div>
       </div>
-        <CookieBanner  />
+      <CookieBanner onAccept={handleCookieAccept} />
+
     </section>
   );
 };
