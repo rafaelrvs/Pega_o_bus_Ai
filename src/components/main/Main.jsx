@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import styles from './Main.module.css';
 import { linhasOnibus } from '../../dados';
 
@@ -8,6 +8,19 @@ const Main = () => {
   const [blocosEncontrados, setBlocosEncontrados] = useState([]); // Armazena os blocos encontrados no arquivo
   const [isButtonDisabled, setIsButtonDisabled] = useState(false); // Estado para desabilitar o botão
   const dataAtual = new Date();
+
+  useEffect(() => {
+    // Adiciona o script do Google AdSense de forma dinâmica
+    const script = document.createElement('script');
+    script.src = 'https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-7736006621106112';
+    script.async = true;
+    script.crossOrigin = 'anonymous';
+    document.body.appendChild(script);
+
+    return () => {
+      document.body.removeChild(script); // Remove o script quando o componente for desmontado
+    };
+  }, []);
 
   const handleSelectChange = (e) => {
     setInputPesquisa(e.target.value.split('-')[0]); // Preenche o campo de pesquisa com o valor selecionado
@@ -22,7 +35,7 @@ const Main = () => {
         .then((data) => processaArquivoTexto(data, inputUsuario))
         .catch((error) => console.error('Erro ao carregar o arquivo:', error))
         .finally(() => {
-          setTimeout(() => setIsButtonDisabled(false), 5000); // Desativa o botão por 10 segundos
+          setTimeout(() => setIsButtonDisabled(false), 5000); // Desativa o botão por 5 segundos
         });
     }
   };
@@ -110,17 +123,18 @@ const Main = () => {
         <div className={styles.resultado}>
           <p>{resultado}</p>
         </div>
+        <div className={styles.containerBtn}>
+
 
         <input
           className={isButtonDisabled ? styles.btnInativo : styles.inputBtn}
           type="button"
           value="Buscar"
           onClick={handleButtonClick}
-          disabled={isButtonDisabled} // Botão desativado por 10 segundos
-        />
+          disabled={isButtonDisabled} // Botão desativado por 5 segundos
+          />
+          </div>
       </div>
-
-      
     </section>
   );
 };

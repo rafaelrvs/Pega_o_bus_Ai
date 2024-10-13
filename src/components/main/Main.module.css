@@ -78,10 +78,17 @@
     align-items: center;
 
 }
+.containerBtn{
+    display: flex;
+    justify-content: end;
+    align-items: center;
+    width: 100%;
+
+}
 .inputBtn {
     margin-left: 10px;
     width: 80px;
-    align-self: flex-end;
+ 
     margin-right: 25px;
     margin-bottom: 5px;
     border-radius: 5px;
