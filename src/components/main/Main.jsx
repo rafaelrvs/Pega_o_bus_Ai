@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import styles from './Main.module.css';
 import { linhasOnibus } from '../../dados';
+import CookieBanner from '../CookieBanner/CookieBanner';
 
 const Main = () => {
   const [inputPesquisa, setInputPesquisa] = useState(''); // Campo de pesquisa
@@ -135,6 +136,7 @@ const Main = () => {
           />
           </div>
       </div>
+        <CookieBanner  />
     </section>
   );
 };
