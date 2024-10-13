@@ -119,6 +119,8 @@ const Main = () => {
           disabled={isButtonDisabled} // Botão desativado por 10 segundos
         />
       </div>
+
+      
     </section>
   );
 };
