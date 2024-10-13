@@ -131,7 +131,7 @@ const Main = () => {
           />
         </div>
       </div>
-      <CookieBanner onAccept={handleCookieAccept} />
+   <CookieBanner onAccept={handleCookieAccept} />
 
     </section>
   );
