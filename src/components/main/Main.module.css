@@ -25,7 +25,7 @@
     height: 50px;
     background-color: var(--background);
     border-radius: 15px 15px 0 0;
-    box-shadow: 0 1px 5px black;
+    box-shadow: 0 1px 5px #0000;
     align-items: center;
     justify-content: center;
     margin-bottom: 10px;
@@ -99,8 +99,9 @@
     border-radius: 5px;
     height: 40px;
     border: 1px solid var(--background);
-    background-color: black;
-    color: var(--background);
+    color: rgb(30, 27, 27);
+
+    
 
 }
 
