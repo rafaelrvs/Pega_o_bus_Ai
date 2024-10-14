@@ -13,6 +13,7 @@
 .section {
     display: flex;
     flex-direction: column;
+ 
     gap: 25px;
 }
 
@@ -113,17 +114,6 @@
 
 }
 
-@media (max-width:600px) {
-    .containerChat{
-        width: 340px;
-    }
-    .containerBtn{
-        width: 90%;
-        margin: 0 auto;
-        gap: 10px;
-    }
-  
-}
 
 
 .cookieBanner {
@@ -151,3 +141,29 @@
     background-color: #45a049;
   }
   
+  .frame{
+    width: 500px;
+    height: 300px;
+  
+    border-radius: 5px;
+    margin: 0 auto;
+  }
+
+  @media (max-width:600px) {
+    .containerChat{
+        width: 340px;
+    }
+    .containerBtn{
+        width: 90%;
+        margin: 0 auto;
+        gap: 10px;
+    }
+    .frame{
+        width:350px;
+        border-radius: 5px;
+        margin: 0 auto;
+      }
+  
+   
+  
+}

@@ -2,20 +2,48 @@ import React, { useState, useEffect } from 'react';
 import styles from './Main.module.css';
 import { linhasOnibus } from '../../dados';
 import CookieBanner from '../CookieBanner/CookieBanner';
+import { mapa } from '../../mapa';
 
 const Main = () => {
   const [inputPesquisa, setInputPesquisa] = useState(''); // Campo de pesquisa
   const [resultado, setResultado] = useState(''); // Resultado a ser exibido
   const [blocosEncontrados, setBlocosEncontrados] = useState([]); // Armazena os blocos encontrados no arquivo
   const [isButtonDisabled, setIsButtonDisabled] = useState(false); // Estado para desabilitar o botão
+  const [linkframe, setLinkframe] = useState("")
   const dataAtual = new Date();
+
 
   const handleSelectChange = (e) => {
     setInputPesquisa(e.target.value.split('-')[0]); // Preenche o campo de pesquisa com o valor selecionado
   };
 
+  function ativaFrame(inputUsuario) {
+    // Converte para uppercase e remove espaços extras
+    const pesquisa = inputUsuario.toString().trim().toUpperCase();
+    console.log(pesquisa);
+
+    const urlsEncontradas = mapa.flatMap(element =>
+        element.linhas.filter(item => item.name.trim().toUpperCase() === pesquisa)
+                      .map(item => item.url) // Mapeia para as URLs
+    );
+
+    // Verifica se foram encontradas URLs
+    if (urlsEncontradas.length > 0) {
+        urlsEncontradas.forEach(url => {
+          setLinkframe(url); // Exibe cada URL encontrada
+        });
+    } else {
+      
+    }
+}
+
+
   const handleButtonClick = () => {
     const inputUsuario = inputPesquisa.toUpperCase();
+
+
+    ativaFrame(inputUsuario)
+
     if (inputUsuario.length > 0) {
       setIsButtonDisabled(true); // Desabilita o botão
       fetch('/Itinerario.txt')
@@ -131,7 +159,10 @@ const Main = () => {
           />
         </div>
       </div>
-   <CookieBanner onAccept={handleCookieAccept} />
+      <iframe className={styles.frame} src={linkframe} frameBorder="0" title="Mapa do ônibus"></iframe>
+
+
+      <CookieBanner onAccept={handleCookieAccept} />
 
     </section>
   );
