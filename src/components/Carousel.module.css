@@ -1,0 +1,59 @@
+.carouselContainer {
+  text-align: center;
+  width: 90%;
+  max-width: 600px;
+  overflow-y: hidden; /* Remove scroll vertical */
+  border: 1px solid #ddd;
+  padding: 20px;
+  border-radius: 10px;
+  background-color: #f9f9f9;
+}
+
+.texto {
+  font-size: 1.2rem;
+  font-weight: bold;
+  color: #333;
+  padding: 10px 0;
+  margin-bottom: 15px;
+}
+
+.controls {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 8px;
+}
+
+.dot {
+  height: 12px;
+  width: 12px;
+  background-color: #bbb;
+  border-radius: 50%;
+  display: inline-block;
+  cursor: pointer;
+}
+
+.active {
+  background-color: #717171;
+}
+
+@media (max-width: 600px) {
+  .carouselContainer {
+    width: 90%;
+    max-width: 300px;
+    text-align: center;
+    border: 1px solid #ddd;
+    padding: 20px;
+    border-radius: 10px;
+    background-color: #f9f9f9;
+  }
+
+  .texto {
+    font-size: 1.1rem;
+  }
+
+  .dot {
+    height: 12px;
+    width: 12px;
+  }
+}

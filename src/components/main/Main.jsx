@@ -3,87 +3,60 @@ import styles from './Main.module.css';
 import { linhasOnibus } from '../../dados';
 import CookieBanner from '../CookieBanner/CookieBanner';
 import { mapa } from '../../mapa';
+import { ativaFrame, processaArquivoTexto } from '../utils';
+import Carousel from '../Carousel';
+import Modal from '../Modal/Modal';
 
 const Main = () => {
-  const [inputPesquisa, setInputPesquisa] = useState(''); // Campo de pesquisa
-  const [resultado, setResultado] = useState(''); // Resultado a ser exibido
-  const [blocosEncontrados, setBlocosEncontrados] = useState([]); // Armazena os blocos encontrados no arquivo
-  const [isButtonDisabled, setIsButtonDisabled] = useState(false); // Estado para desabilitar o botão
-  const [linkframe, setLinkframe] = useState("")
+  const [inputPesquisa, setInputPesquisa] = useState(''); 
+  const [resultado, setResultado] = useState(''); 
+  const [blocosEncontrados, setBlocosEncontrados] = useState([]);
+  const [isButtonDisabled, setIsButtonDisabled] = useState(false); 
+  const [linkframe, setLinkframe] = useState("");
+  const [isModalOpen, setIsModalOpen] = useState(false); // Controla o modal
   const dataAtual = new Date();
 
+  // Verifica se os termos foram aceitos ao carregar o componente
+  useEffect(() => {
+    const termosAceitos = localStorage.getItem('termosAceitos');
+    if (!termosAceitos) {
+      setIsModalOpen(true); // Abre o modal se os termos não foram aceitos
+    }
+  }, []);
 
   const handleSelectChange = (e) => {
-    setInputPesquisa(e.target.value.split('-')[0]); // Preenche o campo de pesquisa com o valor selecionado
+    setInputPesquisa(e.target.value.split('-')[0]);
   };
 
-  function ativaFrame(inputUsuario) {
-    // Converte para uppercase e remove espaços extras
-    const pesquisa = inputUsuario.toString().trim().toUpperCase();
-    console.log(pesquisa);
-
-    const urlsEncontradas = mapa.flatMap(element =>
-        element.linhas.filter(item => item.name.trim().toUpperCase() === pesquisa)
-                      .map(item => item.url) // Mapeia para as URLs
-    );
-
-    // Verifica se foram encontradas URLs
-    if (urlsEncontradas.length > 0) {
-        urlsEncontradas.forEach(url => {
-          setLinkframe(url); // Exibe cada URL encontrada
-        });
-    } else {
-      
-    }
-}
-
+  const handleCookieAccept = () => {
+    const script = document.createElement('script');
+    script.src = 'https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-7736006621106112';
+    script.async = true;
+    script.crossOrigin = 'anonymous';
+    document.body.appendChild(script);
+  };
 
   const handleButtonClick = () => {
+    const termosAceitos = localStorage.getItem('termosAceitos');
+    if (!termosAceitos) {
+      alert("Por favor, aceite os Termos de Uso antes de consultar.");
+      setIsModalOpen(true); // Reabre o modal se os termos não foram aceitos
+      return;
+    }
+
     const inputUsuario = inputPesquisa.toUpperCase();
 
-
-    ativaFrame(inputUsuario)
+    ativaFrame(inputUsuario, mapa, setLinkframe);
 
     if (inputUsuario.length > 0) {
-      setIsButtonDisabled(true); // Desabilita o botão
+      setIsButtonDisabled(true);
       fetch('/Itinerario.txt')
         .then((response) => response.text())
-        .then((data) => processaArquivoTexto(data, inputUsuario))
+        .then((data) => processaArquivoTexto(data, inputUsuario, setBlocosEncontrados, setResultado, enviaParaServidor))
         .catch((error) => console.error('Erro ao carregar o arquivo:', error))
         .finally(() => {
-          setTimeout(() => setIsButtonDisabled(false), 5000); // Desativa o botão por 5 segundos
+          setTimeout(() => setIsButtonDisabled(false), 5000);
         });
-    }
-  };
-
-  const processaArquivoTexto = (conteudo, inputUsuario) => {
-    const linhas = conteudo.split('\n');
-    let blocoAtual = '';
-    let blocosTemp = [];
-    let capturandoBloco = false;
-
-    linhas.forEach((linha) => {
-      if (linha.startsWith('Linha')) {
-        if (capturandoBloco && blocoAtual) {
-          blocosTemp.push(blocoAtual); // Armazena o bloco anterior
-        }
-        capturandoBloco = linha.toUpperCase().includes(inputUsuario);
-        blocoAtual = capturandoBloco ? linha + '\n' : ''; // Reseta o bloco atual
-      } else if (capturandoBloco) {
-        blocoAtual += linha + '\n'; // Continua capturando o bloco
-      }
-    });
-
-    // Captura o último bloco
-    if (capturandoBloco && blocoAtual) {
-      blocosTemp.push(blocoAtual);
-    }
-
-    if (blocosTemp.length > 0) {
-      setBlocosEncontrados(blocosTemp);
-      enviaParaServidor(blocosTemp);
-    } else {
-      setResultado('Nenhum bloco correspondente encontrado.');
     }
   };
 
@@ -99,35 +72,37 @@ const Main = () => {
         text: `Me responda de forma resumida o próximo horário de ônibus de acordo com meu horário atual ${dataAtual} ${blocos.join('\n\n')}`,
       }),
     })
-      .then((response) => response.json())
-      .then((data) => setResultado(data.resposta)) // Exibe a resposta do servidor
-      .catch((error) => {
-        console.error('Erro ao enviar para o servidor:', error);
-        setResultado('Erro ao processar a solicitação.');
-      });
+    .then((response) => response.json())
+    .then((data) => setResultado(data.resposta))
+    .catch((error) => {
+      console.error('Erro ao enviar para o servidor:', error);
+      setResultado('Erro ao processar a solicitação.');
+    });
   };
 
-  const handleCookieAccept = () => {
-    const script = document.createElement('script');
-    script.src = 'https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-7736006621106112';
-    script.async = true;
-    script.crossOrigin = 'anonymous';
-    document.body.appendChild(script);
+  // Função para aceitar os termos
+  const handleAcceptTerms = () => {
+    localStorage.setItem('termosAceitos', 'true'); // Salva a aceitação no localStorage
+    setIsModalOpen(false); // Fecha o modal ao aceitar
+  };
+
+  // Função para fechar o modal sem aceitar os termos (mantém o modal aberto na próxima tentativa)
+  const handleCloseModal = () => {
+    alert("Você precisa aceitar os Termos de Uso para continuar.");
+    setIsModalOpen(true); // Reabre o modal
   };
 
   return (
     <section className={styles.section}>
       <img className={styles.img} src="/image/onibus.svg" alt="Logo" />
+      
+      <Carousel />
       <div className={styles.containerChat}>
         <div className={styles.header}>
           <p>Consulte seu ônibus</p>
         </div>
 
-        <select
-          className={styles.option}
-          onChange={handleSelectChange}
-          value={inputPesquisa}
-        >
+        <select className={styles.option} onChange={handleSelectChange} value={inputPesquisa}>
           <option className={styles.option} value="">
             Selecione a linha
           </option>
@@ -150,20 +125,29 @@ const Main = () => {
           <p>{resultado}</p>
         </div>
         <div className={styles.containerBtn}>
-          <input
-            className={isButtonDisabled ? styles.btnInativo : styles.inputBtn}
-            type="button"
-            value="Buscar"
-            onClick={handleButtonClick}
-            disabled={isButtonDisabled} // Botão desativado por 5 segundos
-          />
+          {isButtonDisabled ? (
+            <div className={styles.loadingSpinner}>
+              {isButtonDisabled ? null : 'Buscar'}
+            </div>
+          ) : (
+            <input
+              className={styles.inputBtn}
+              type="button"
+              value="Buscar"
+              onClick={handleButtonClick}
+              disabled={isButtonDisabled}
+            />
+          )}
         </div>
       </div>
       <iframe className={styles.frame} src={linkframe} frameBorder="0" title="Mapa do ônibus"></iframe>
-
-
       <CookieBanner onAccept={handleCookieAccept} />
-
+      
+      {/* Componente Modal */}
+      <Modal isOpen={isModalOpen} onClose={handleCloseModal} onAccept={handleAcceptTerms}>
+        <p>Este é o texto padrão dos Termos de Uso e Política de Privacidade.</p>
+        <button onClick={handleAcceptTerms} className={styles.acceptTermsBtn}>Aceitar Termos</button>
+      </Modal>
     </section>
   );
 };
