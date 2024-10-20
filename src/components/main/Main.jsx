@@ -61,10 +61,9 @@ const Main = () => {
   };
 
   const enviaParaServidor = (blocos) => {
-    setResultado('em desenvolvimento...');
-    //https://api-bus-g6pv.onrender.com/api-bus-g6pv.onrender.com
-  
-    fetch('http://localhost:3000/analyze', {
+    setResultado('Em desenvolvimento...');
+
+    fetch('https://api-bus-g6pv.onrender.com/analyze', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
