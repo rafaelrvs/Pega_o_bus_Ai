@@ -1,4 +1,4 @@
-export const mapa = [{
+ const mapa = [{
      linhas:[{name:"C002A",url: "https://mobilidade.mogidascruzes.sp.gov.br/mapa_linha/eyJpdiI6IjhGWWlwRVc0b1U0dVgxSU9WNHg1cGc9PSIsInZhbHVlIjoiOWJpa1J4aVd3YThKRUxZSStxNWFTQT09IiwibWFjIjoiMGY1ZTkwYjkzZjhkOGRlODJlOGU1YTUyZTQ3YWM0M2I4ZDAzNmE0YWVjNzRmMTJhM2FhZDE0ZDQ5NTk5MTczYSJ9"},
      {name:"C002B",url: "https://mobilidade.mogidascruzes.sp.gov.br/mapa_linha/eyJpdiI6ImZjYzdWV2ZhbTNSL0x3UkFvUjVNQmc9PSIsInZhbHVlIjoiRlZYb2N2djY1WGhNM3VSUHNHYUMzQT09IiwibWFjIjoiNzZkOWE5MjgwNTQ2MDUzOWRjOWU2MmU0ZTczYjliYzgzNjZiMDIzOWU3YmUyYWIxOTE4MmMyMmQxNTZkM2JlOCJ9"},
      {name:"C101",url:"https://mobilidade.mogidascruzes.sp.gov.br/mapa_linha/eyJpdiI6IlBFSWpIOUhaTlZsL3R3eE5IbldXWmc9PSIsInZhbHVlIjoiMnd4U0VLNGJqZnNPTnRIZG5XYUVqQT09IiwibWFjIjoiNmM5YjI1MTQ1OGQ3NDA2YjQ3MTBiMTI5MGU1MDkwMzYzZGJhZmRlY2Q4YjdkZDIxNmRhZmFlZjIzYmY1MDZjOCJ9"},
@@ -78,3 +78,4 @@ export const mapa = [{
      ]
 }]
 
+export default mapa

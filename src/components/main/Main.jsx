@@ -2,32 +2,31 @@ import React, { useState, useEffect } from 'react';
 import styles from './Main.module.css';
 import { linhasOnibus } from '../../dados';
 import CookieBanner from '../CookieBanner/CookieBanner';
-import { mapa } from '../../mapa';
-import { ativaFrame, processaArquivoTexto } from '../utils';
+import { ativaFrame } from '../utils';
 import Carousel from '../Carousel';
 import Modal from '../Modal/Modal';
+import mapa from './../../mapa.js';
+import axios from 'axios';
 
 const Main = () => {
   const [inputPesquisa, setInputPesquisa] = useState(''); 
   const [resultado, setResultado] = useState(''); 
-  const [blocosEncontrados, setBlocosEncontrados] = useState([]);
   const [isButtonDisabled, setIsButtonDisabled] = useState(false); 
   const [linkframe, setLinkframe] = useState("");
   const [isModalOpen, setIsModalOpen] = useState(false); // Controla o modal
-  const dataAtual = new Date();
+  const dataAtual = new Date().toLocaleTimeString(); // Formata o horário atual
 
-  // Verifica se os termos foram aceitos ao carregar o componente
   useEffect(() => {
     const termosAceitos = localStorage.getItem('termosAceitos');
     if (!termosAceitos) {
       setIsModalOpen(true); // Abre o modal se os termos não foram aceitos
     }
   }, []);
-
+  
   const handleSelectChange = (e) => {
     setInputPesquisa(e.target.value.split('-')[0]);
   };
-
+  
   const handleCookieAccept = () => {
     const script = document.createElement('script');
     script.src = 'https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-7736006621106112';
@@ -35,50 +34,80 @@ const Main = () => {
     script.crossOrigin = 'anonymous';
     document.body.appendChild(script);
   };
-
   const handleButtonClick = () => {
     const termosAceitos = localStorage.getItem('termosAceitos');
+    setIsButtonDisabled(true);
+    
     if (!termosAceitos) {
       alert("Por favor, aceite os Termos de Uso antes de consultar.");
       setIsModalOpen(true); // Reabre o modal se os termos não foram aceitos
       return;
     }
-
-    const inputUsuario = inputPesquisa.toUpperCase();
-
-    ativaFrame(inputUsuario, mapa, setLinkframe);
-
-    if (inputUsuario.length > 0) {
-      setIsButtonDisabled(true);
-      fetch('/Itinerario.txt')
-        .then((response) => response.text())
-        .then((data) => processaArquivoTexto(data, inputUsuario, setBlocosEncontrados, setResultado, enviaParaServidor))
-        .catch((error) => console.error('Erro ao carregar o arquivo:', error))
-        .finally(() => {
-          setTimeout(() => setIsButtonDisabled(false), 5000);
-        });
+  
+    const inputUsuario = inputPesquisa.trim().toUpperCase(); // Usando trim() para remover espaços extras
+  
+    if (inputUsuario.length === 0) {
+      alert("Por favor, digite o código da linha de ônibus.");
+      return;
     }
+  
+    ativaFrame(inputUsuario, mapa, setLinkframe); // Presumindo que essa função está correta
+    
+  
+    // Fazer a requisição para buscar os dados da API, passando o código da linha como parâmetro
+    axios.get(`https://api-bus-g6pv.onrender.com/escolhaOnibus?codigo=${inputUsuario.trim()}`)
+      .then((response) => {
+        const data = response.data;
+          enviaParaServidor(data);
+      
+         
+      })
+      .catch((error) => {
+        console.error('Erro ao carregar os dados da API:', error);
+        setResultado('Erro ao buscar os dados da linha de ônibus.');
+      })
+      .finally(() => {
+        setTimeout(() => setIsButtonDisabled(false), 3000); 
+      });
   };
+  
+  const formataHorariosParaEnvio = (horarios) => {
+    return Object.keys(horarios).map(dia => {
+        const horas = horarios[dia].join(', ');
+        return `${dia}: ${horas}`;
+    }).join(' | ');
+};
 
-  const enviaParaServidor = (blocos) => {
-    setResultado('Em desenvolvimento...');
+const enviaParaServidor = (dados) => {
+  console.log(dados);
+  
+    if (!dados.horarios || Object.keys(dados.horarios).length === 0) {
+        console.error('Horários não encontrados:', dados); // Verifica se os horários estão presentes
+        setResultado('Horários não encontrados.');
+        return;
+    }
 
-    fetch('https://api-bus-g6pv.onrender.com/analyze', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify({
-        text: `Me responda de forma resumida o próximo horário de ônibus de acordo com meu horário atual ${dataAtual} ${blocos.join('\n\n')}`,
-      }),
+    const horariosFormatados = formataHorariosParaEnvio(dados.horarios);
+
+
+    setResultado('Consultando o próximo horário de ônibus...');
+
+    axios.post('https://api-bus-g6pv.onrender.com/analyze', {
+        text: `Me responda de forma resumida o próximo horário de ônibus de acordo com meu horário atual (${dataAtual}). mais informações(${JSON.stringify(dados)})`,
+        horarios: JSON.stringify(horariosFormatados),
+    
     })
-    .then((response) => response.json())
-    .then((data) => setResultado(data.resposta))
+    .then((response) => {
+
+        const resposta = response.data?.resposta || 'Resposta não encontrada';
+        setResultado(resposta); // Exibir a resposta da API do Chat
+    })
     .catch((error) => {
-      console.error('Erro ao enviar para o servidor:', error);
-      setResultado('Erro ao processar a solicitação.');
+        console.error('Erro ao enviar para o servidor:', error);
+        setResultado('Erro ao processar a solicitação.');
     });
-  };
+};
+
 
   // Função para aceitar os termos
   const handleAcceptTerms = () => {
