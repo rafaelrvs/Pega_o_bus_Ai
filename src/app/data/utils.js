@@ -1,6 +1,4 @@
-// utils.js
 
-// Função para ativar o frame
 export const ativaFrame = (inputUsuario, mapa, setLinkframe) => {
     const pesquisa = inputUsuario.toString().trim().toUpperCase();
     console.log(pesquisa);

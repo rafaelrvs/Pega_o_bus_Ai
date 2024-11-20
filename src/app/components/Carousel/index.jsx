@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import styles from './Carousel.module.css';
-import { NavLink } from 'react-router-dom';
-import { textos } from './SaibaMais/dataSaibaMais';
+import { textos } from '@/app/data';
+
 
 const Carousel = () => {
   const [currentIndex, setCurrentIndex] = useState(0);
@@ -35,9 +35,6 @@ const Carousel = () => {
     <div className={styles.carouselContainer}>
       <h3>Dicas e informativos</h3>
       <p className={styles.texto}>{textos[currentIndex].descricao}</p>
-      <NavLink to="/conhecimento" className={styles.saibaMaisLink}>
-        Saiba mais
-      </NavLink>
 
       <div className={styles.controls}>
         {startIndex > 0 && (
