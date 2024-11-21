@@ -156,7 +156,6 @@ const ModalFormsOnibus = () => {
                     ))}
                 </select>
                 <input
-
                     type="text"
                     placeholder={"Digite seu onibus"}
                     value={insireCEP}
